@@ -33,9 +33,14 @@ if(!function_exists('add_action')) {
 }
 
 // Define the PLUGIN URL
-define('PRACTICE_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('PRACTICE_PLUGIN_URL', dirname(__FILE__));
 
-require_once plugin_dir_path(__FILE__).'inc/class-practice-plugin.php';
+if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+    require_once( dirname(__FILE__) . '/inc/admin.class.php' );
+    add_action( 'init', array( 'PPAdmin', 'init' ) );
+}
+
+require_once dirname(__FILE__) . '/inc/practiceplugin.class.php';
 if(class_exists('Practice_Plugin')) {
     $practice_plugin = new Practice_Plugin('Practice Plugin initialized');
     /**
